@@ -124,6 +124,34 @@ if(isset($_POST['accion'])){
                 
             echo  json_encode($response);
             break;
+        case 'buscar':
+                if(isset($_POST['id'])) {
+                    $id=$_POST['id'];
+                    $sql = "SELECT p.id, CONCAT(a.marca,' ', a.modelo,' ', a.no_serie) AS automovil, c.nombre AS dueño FROM Propiedad p 
+                    JOIN Autos a ON (p.autos_id_auto = a.id_auto) 
+                    JOIN Clientes c ON (p.clientes_id_cliente = c.id_cliente)
+                    WHERE c.id_cliente = $id";
+                    $result = $db->query($sql);
+                    if ($result->num_rows > 0) {
+                        while ($fila = $result->fetch_assoc()) {
+                            $dueño['nombre'] = $fila['dueño'];
+                            $item['automovil'] = $fila['automovil'];
+                            $dueño['autos'][] = $item;
+                        }
+                        $response["status"] = "OK";
+                        $response["mensaje"] = $dueño;
+                        
+                    } else {
+                        $response["status"] = "Error";
+                        $response["mensaje"] = "No hay registros";
+                    }
+                }else{
+                    $response["status"] = "Error";
+                    $response["mensaje"] = "Faltan campos obligatorios";
+                }
+                    
+                echo  json_encode($response);
+                break;
         default:
             break;
     }
