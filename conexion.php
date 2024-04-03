@@ -1,9 +1,11 @@
 <?php
 
-$db_host = "localhost:3306";  
-$db_username = "progWeb";     
-$db_password = "abc123456";   
-$db_database = "Concesionaria";
+include('dotenv.php');
+
+$db_host = getenv('DB_HOST');
+$db_username = getenv('DB_USER');
+$db_password = getenv('DB_PASS');
+$db_database = getenv('DB_NAME');
 
 $db = new mysqli($db_host, $db_username, $db_password, $db_database);
 
